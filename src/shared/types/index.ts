@@ -1,0 +1,297 @@
+// ============== UNIFIED TYPES ==============
+// Shared types for Treasury + Rapprochement modules
+
+// User and Role Types
+export type UserRole = 'TRESORIER' | 'ADMIN_CLIENT' | 'ADMIN_BANQUE' | 'BACKOFFICE_BANQUE'
+
+export interface User {
+  id: string
+  name: string
+  email: string
+  role: UserRole
+  password?: string
+  avatar?: string
+  lastLogin?: Date
+  createdAt?: Date
+  isActive: boolean
+}
+
+// Supplier/Client Types
+export interface Fournisseur {
+  id: string
+  raisonSociale: string
+  ice: string
+  identifiantFiscal: string
+  rc: string
+  adresse: string
+  ville: string
+  pays: string
+  rib: string
+  banqueDomiciliataire: string
+  emailFacturation?: string
+  telephone?: string
+  delaiPaiement: number
+  modePaiement: 'Virement' | 'Chèque' | 'Espèces' | 'Prélèvement'
+  tauxTvaDefaut: number
+  statut: 'Actif' | 'Inactif'
+  createdAt: Date
+  updatedAt: Date
+}
+
+export interface Client {
+  id: string
+  raisonSociale: string
+  ice: string
+  identifiantFiscal: string
+  rc: string
+  adresse: string
+  ville: string
+  pays: string
+  rib: string
+  banqueDomiciliataire: string
+  emailFacturation?: string
+  telephone?: string
+  delaiPaiement: number
+  modePaiement: 'Virement' | 'Chèque' | 'Espèces' | 'Prélèvement'
+  tauxTvaDefaut: number
+  segment?: 'PME' | 'ETI' | 'GE' | 'Administration'
+  statut: 'Actif' | 'Inactif'
+  createdAt: Date
+  updatedAt: Date
+}
+
+export interface EnterpriseClient {
+  id: string
+  companyName: string
+  ice: string
+  sector: string
+  contactName: string
+  contactEmail: string
+  contactPhone: string
+  plan: 'starter' | 'professional' | 'enterprise'
+  status: 'active' | 'inactive' | 'trial'
+  createdAt: string
+  monthlyFee: number
+  usersCount: number
+}
+
+// Invoice Types
+export type InvoiceType = 'RECUE' | 'EMISE'
+export type InvoiceSource = 'MANUELLE' | 'ERP' | 'OCR'
+export type InvoiceStatus =
+  | 'EN_ATTENTE'
+  | 'RAPPROCHE'
+  | 'ECART_DETECTE'
+  | 'NON_RAPPROCHE'
+  | 'NON_RAPPROCHEE'
+  | 'JUSTIFIE'
+  | 'SUGGESTION_EN_ATTENTE'
+export type PaymentStatus = 'Non payée' | 'Partielle' | 'Payée'
+
+export interface InvoiceLine {
+  id: string
+  description: string
+  compte: string
+  compteLabel: string
+  quantite: number
+  prixUnitaireHT: number
+  tauxTva: number
+  montantHT: number
+  montantTva: number
+  montantTTC: number
+}
+
+export interface Invoice {
+  id: string
+  type: InvoiceType
+  numero: string
+  tiersId: string
+  tiersNom: string
+  tiersIce?: string | null
+  dateEmission: Date
+  dateEcheance?: Date
+  source: InvoiceSource
+  lignes?: InvoiceLine[]
+  montantHT: number
+  montantTva: number
+  montantTTC: number
+  montantDu?: number
+  devise: 'MAD' | 'EUR' | 'USD' | 'GBP'
+  statutPaiement?: PaymentStatus
+  modePaiementEffectif?: 'Virement' | 'Chèque' | 'Espèces'
+  referencePaiement?: string
+  description?: string
+  pieceJointe?: string
+  status: InvoiceStatus
+  createdAt: Date
+  updatedAt: Date
+}
+
+// Bank Movement Types
+export interface MouvementBancaire {
+  id: string
+  reference: string
+  dateValeur: Date
+  montant: number
+  libelle: string
+  banque: string
+  sens: 'CREDIT' | 'DEBIT'
+}
+
+// Reconciliation Types
+export interface ReconciliationScore {
+  montant: number
+  date: number
+  referenceFacture: number
+  contrepartie: number
+  total: number
+}
+
+export interface RejectionDetail {
+  id: string
+  reason: 'MONTANT_DEDOUBLE' | 'DATE_INCOHERENT' | 'CONTREPARTIE_INEXACTE' | 'AUTRE'
+  comment: string
+  rejectedBy: string
+  rejectionDate: Date
+  invoiceReference: string
+  submissionNumber: number
+}
+
+export interface Reconciliation {
+  id: string
+  invoice: Invoice
+  mouvement?: MouvementBancaire
+  erpEntry?: {
+    reference: string
+    montant: number
+    date: Date
+  }
+  score: ReconciliationScore
+  status: 'RAPPROCHEE' | 'ECART_DETECTE' | 'NON_RAPPROCHEE' | 'SUGGESTION_EN_ATTENTE'
+  justification?: string
+  justificationDate?: Date
+  validatedBy?: string
+  validationDate?: Date
+  rejectionComment?: string
+  rejectionDetail?: RejectionDetail
+  mouvementBancaireId?: string
+}
+
+export type JustificationReviewStatus = 'PENDING' | 'APPROVED' | 'REJECTED'
+
+export interface ValidationQueueItem {
+  id: string
+  invoiceId: string
+  reconciliationId: string
+  justification: string
+  status: JustificationReviewStatus
+  submittedAt: Date
+  reviewedAt?: Date
+  reviewedBy?: string
+  rejectionComment?: string
+  submissionCount: number
+}
+
+export interface JustificationHistoryEntry {
+  id: string
+  queueItemId: string
+  invoiceId: string
+  reconciliationId: string
+  action: 'SUBMITTED' | 'APPROVED' | 'REJECTED' | 'RESUBMITTED'
+  comment?: string
+  actor: string
+  createdAt: Date
+}
+
+// Report Types
+export interface CPCEntry {
+  tiers: string
+  categorie: string
+  compte: string
+  montantHT: number
+  tva: number
+  montantTTC: number
+}
+
+export interface TVAEntry {
+  taux: number
+  baseHT: number
+  montantTva: number
+  nbFactures: number
+}
+
+// Chart of Accounts
+export interface CompteComptable {
+  code: string
+  label: string
+  type: 'CHARGE' | 'PRODUIT'
+}
+
+// Admin Configuration
+export interface ReconciliationConfig {
+  scoreMinAuto: number
+  scoreMinSuggestion: number
+  toleranceMontant: number
+  toleranceDate: number
+}
+
+// Notification
+export interface Notification {
+  id: string
+  type: 'info' | 'warning' | 'error' | 'success'
+  title: string
+  message: string
+  read?: boolean
+  isRead?: boolean
+  createdAt: Date
+}
+
+// Treasury-specific types
+export interface BankAccount {
+  id: string
+  name: string
+  iban: string
+  bic: string
+  bankName: string
+  currency: 'MAD' | 'EUR' | 'USD' | 'GBP'
+  balance: number
+  lastUpdated: Date
+  isActive: boolean
+}
+
+export interface CashFlow {
+  id: string
+  date: Date
+  accountId: string
+  type: 'ENTREE' | 'SORTIE'
+  category: string
+  amount: number
+  description: string
+  reference?: string
+  status: 'PREVU' | 'REALISE' | 'EN_ATTENTE'
+}
+
+export interface TreasuryForecast {
+  id: string
+  accountId: string
+  period: string
+  startDate: Date
+  endDate: Date
+  openingBalance: number
+  projectedInflows: number
+  projectedOutflows: number
+  closingBalance: number
+  variance?: number
+}
+
+export interface Alert {
+  id: string
+  type: 'SOLDE_BAS' | 'ECHEANCE_PROCHE' | 'FLUX_ANORMAL' | 'RAPPROCHEMENT_ECART'
+  severity: 'low' | 'medium' | 'high' | 'critical'
+  title: string
+  message: string
+  accountId?: string
+  createdAt: Date
+  readAt?: Date
+  resolvedAt?: Date
+}
