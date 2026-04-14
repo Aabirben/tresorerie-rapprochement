@@ -1,20 +1,15 @@
 // User and Role Types
-export type UserRole = 'TRESORIER' | 'ADMIN_CLIENT' | 'ADMIN_BANQUE'
+export type UserRole = 'TRESORIER' | 'ADMIN_CLIENT' | 'ADMIN_BANQUE' | 'BACKOFFICE'
 
 export interface User {
   id: string
   name: string
   email: string
   role: UserRole
-<<<<<<< HEAD
-  avatar?: string
-  lastLogin?: Date
-=======
   password?: string // Optionnel - mot de passe non chiffré (mock data uniquement)
   avatar?: string
   lastLogin?: Date
   createdAt?: Date
->>>>>>> 5f28b869fcfa531563af02805aeceaa3953acd47
   isActive: boolean
 }
 
@@ -29,11 +24,7 @@ export interface Fournisseur {
   ville: string
   pays: string
   rib: string
-<<<<<<< HEAD
-  banqueDomiciliataire?: string
-=======
   banqueDomiciliataire: string
->>>>>>> 5f28b869fcfa531563af02805aeceaa3953acd47
   emailFacturation?: string
   telephone?: string
   delaiPaiement: number
@@ -49,30 +40,18 @@ export interface Client {
   raisonSociale: string
   ice: string
   identifiantFiscal: string
-<<<<<<< HEAD
-  rc?: string
-=======
   rc: string
->>>>>>> 5f28b869fcfa531563af02805aeceaa3953acd47
   adresse: string
   ville: string
   pays: string
   rib: string
-<<<<<<< HEAD
-  banqueDomiciliataire?: string
-=======
   banqueDomiciliataire: string
->>>>>>> 5f28b869fcfa531563af02805aeceaa3953acd47
   emailFacturation?: string
   telephone?: string
   delaiPaiement: number
   modePaiement: 'Virement' | 'Chèque' | 'Espèces' | 'Prélèvement'
   tauxTvaDefaut: number
-<<<<<<< HEAD
-  segment?: 'TPE' | 'PME' | 'GE' | 'Public'
-=======
   segment?: 'PME' | 'ETI' | 'GE' | 'Administration'
->>>>>>> 5f28b869fcfa531563af02805aeceaa3953acd47
   statut: 'Actif' | 'Inactif'
   createdAt: Date
   updatedAt: Date
@@ -96,9 +75,6 @@ export interface EnterpriseClient {
 // Invoice Types
 export type InvoiceType = 'RECUE' | 'EMISE'
 export type InvoiceSource = 'MANUELLE' | 'ERP' | 'OCR'
-<<<<<<< HEAD
-export type InvoiceStatus = 'EN_ATTENTE' | 'RAPPROCHE' | 'ECART_DETECTE' | 'NON_RAPPROCHE' | 'JUSTIFIE'
-=======
 export type InvoiceStatus =
   | 'EN_ATTENTE'
   | 'RAPPROCHE'
@@ -106,7 +82,6 @@ export type InvoiceStatus =
   | 'NON_RAPPROCHE'
   | 'JUSTIFIE'
   | 'SUGGESTION_EN_ATTENTE'
->>>>>>> 5f28b869fcfa531563af02805aeceaa3953acd47
 export type PaymentStatus = 'Non payée' | 'Partielle' | 'Payée'
 
 export interface InvoiceLine {
@@ -168,8 +143,6 @@ export interface ReconciliationScore {
   total: number
 }
 
-<<<<<<< HEAD
-=======
 // RG-JUST-04: Historique des rejets avec motifs structurés
 export interface RejectionDetail {
   id: string
@@ -181,7 +154,6 @@ export interface RejectionDetail {
   submissionNumber: number
 }
 
->>>>>>> 5f28b869fcfa531563af02805aeceaa3953acd47
 export interface Reconciliation {
   id: string
   invoice: Invoice
@@ -192,18 +164,12 @@ export interface Reconciliation {
     date: Date
   }
   score: ReconciliationScore
-<<<<<<< HEAD
-  status: 'RAPPROCHEE' | 'ECART_DETECTE' | 'NON_RAPPROCHEE'
-=======
   status: 'RAPPROCHEE' | 'ECART_DETECTE' | 'NON_RAPPROCHEE' | 'SUGGESTION_EN_ATTENTE'
->>>>>>> 5f28b869fcfa531563af02805aeceaa3953acd47
   justification?: string
   justificationDate?: Date
   validatedBy?: string
   validationDate?: Date
   rejectionComment?: string
-<<<<<<< HEAD
-=======
   rejectionDetail?: RejectionDetail
   // RG-RAPP-02: Lier une facture à UN SEUL mouvement bancaire (relation 1:1)
   mouvementBancaireId?: string
@@ -233,7 +199,6 @@ export interface JustificationHistoryEntry {
   comment?: string
   actor: string
   createdAt: Date
->>>>>>> 5f28b869fcfa531563af02805aeceaa3953acd47
 }
 
 // Report Types
